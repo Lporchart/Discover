@@ -208,6 +208,8 @@ td.income{
 
         opacity: 0;
         visibility: hidden;
+
+        z-index: 999;
     }
 
     .modal-overlay.active{
@@ -219,6 +221,7 @@ td.income{
         background: #f0f2f5;
         padding: 2.4rem;
         width: 90%;    
+        max-width: 500px;
         position: relative;    
         z-index: 1;        
     }
@@ -234,7 +237,10 @@ td.income{
     }
 
     input{
-        border: none;
+        border: 1px solid #ccc;
+        /* borda selecionada */
+        outline: 3;
+        outline-color: green;
         border-radius: 0.2rem;    
         padding: 0.8rem;    
         width: 100%;
@@ -266,8 +272,7 @@ footer{
     padding: 0rem 0 2rem;
     color: var(--dark-blue);
     opacity: 0.6;  
-    position: fixed;
-    bottom: 0px; 
+
     
 }
 

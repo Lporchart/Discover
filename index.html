@@ -50,7 +50,7 @@
 
             <section id="transaction">
                 <h2 class="sr-only">Transações</h2>
-                <a href="#" class="button new">+ nova Transação</a>
+                <a href="#" onclick="Modal.open()" class="button new">+ nova Transação</a>
                 <table id="data-table">
                     <thead>
                         <tr>
@@ -84,7 +84,7 @@
             </section>
         </main>
 
-        <div class="modal-overlay active">
+        <div class="modal-overlay">
             <div class="modal">                
                 <div class="form">
                     <h2>Nova Transanção</h2>
@@ -129,5 +129,6 @@
         <footer>
             <p>dev.finances$</p>
         </footer>
+        <script src="./script.js"></script>
     </body>
 </html>
