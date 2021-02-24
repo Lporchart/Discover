@@ -12,21 +12,27 @@ const Modal = {
     }
 }
 
+const Storage = {
+    get() {
+        return JSON.parse(localStorage.getItem("dev.finances:transactions")) || []
+    },
+
+    set(transactions) {
+        localStorage.setItem("dev.finances:transactions", JSON.stringify(transactions))
+    }
+}
 
 const Transaction = {
-    all: [
-        { description: 'luz', amount: -50000, date: '23/01/21' },
-        { description: 'site', amount: 1000000, date: '23/01/21' },
-        { description: 'empresa', amount: -500000, date: '23/01/21' }
-    ],
+    all: Storage.get(),
     add(transaction) {
         Transaction.all.push(transaction)
         App.reload()
     },
 
     remove(index) {
-        Transaction.all.slice(index, 1)
-        App.reload
+        Transaction.all.splice(index, 1)
+
+        App.reload()
     },
 
     inconmes() {
@@ -36,7 +42,7 @@ const Transaction = {
                 income += transaction.amount;
             }
         })
-        return income
+        return income;
     },
     expenses() {
         let expense = 0;
@@ -45,41 +51,46 @@ const Transaction = {
                 expense += transaction.amount;
             }
         })
-        return expense
+        return expense;
     },
     total() {
         let expense = Transaction.expenses();
         let income = Transaction.inconmes();
         let total = income + expense
 
-        return total
-    }
+        return total;
+    },
 }
+
 
 const DOM = {
     transactionContainer: document.querySelector('#data-table tbody'),
     addTransaction(transaction, index) {
         const tr = document.createElement('tr')
-        tr.innerHTML = DOM.innerHTMLTransaction(transaction)
-
+        tr.innerHTML = DOM.innerHTMLTransaction(transaction, index)
+        tr.dataset.index = index
         DOM.transactionContainer.appendChild(tr)
-    },
-    innerHTMLTransaction(transaction) {
-        const CSSclass = transaction.amount > 0 ? "income" : "expense"
 
+    },
+    innerHTMLTransaction(transaction, index) {
+        const CSSclass = transaction.amount > 0 ? "income" : "expense"
         const amount = Utils.formatCurrency(transaction.amount)
 
         const html = `
             <td class="description">${transaction.description}</td>
             <td class="${CSSclass}">${amount}</td>
             <td class="date">${transaction.date}</td>
-            <td><img src="./assets/minus.svg" alt="remover Transação"></td>
+            <td>
+                <img onclick="Transaction.remove(${index})" src="./assets/minus.svg" alt="Remover transação">
+            </td>
             `
         return html
     },
     updateBalance() {
+        amountPossitiv = Transaction.expenses()
+        amountPossitiv = Math.abs(amountPossitiv)        
         document.getElementById('incomedisplay').innerHTML = Utils.formatCurrency(Transaction.inconmes())
-        document.getElementById('expensedisplay').innerHTML = Utils.formatCurrency(Transaction.expenses())
+        document.getElementById('expensedisplay').innerHTML = Utils.formatCurrency(amountPossitiv)
         document.getElementById('totaldisplay').innerHTML = Utils.formatCurrency(Transaction.total())
     },
     clearTransactions() {
@@ -92,8 +103,7 @@ const Utils = {
         value = Number(value) * 100
         return value
     },
-    formatDate(date) {
-        console.log(date);
+    formatDate(date) {        
         const splittedDate = date.split("-")
         return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`
     },
@@ -164,11 +174,11 @@ const Form = {
 
 const App = {
     init() {
-        Transaction.all.forEach(transaction => {
-            DOM.addTransaction(transaction)
-        })
-
+        // da para ser feita assim tbm "Transaction.all.forEach(DOM.addTransaction) " pq os dois recebem o mesmo parametros
+        
+        Transaction.all.forEach(DOM.addTransaction)        
         DOM.updateBalance()
+        Storage.set(Transaction.all)
     },
     reload() {
         DOM.clearTransactions()

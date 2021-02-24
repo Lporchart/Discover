@@ -264,6 +264,9 @@ td.income{
     .input-group.actions .button,
     .input-group.actions button{
         width: 48%;
+        outline: 3;
+        outline-color: green;
+        border-radius: 0.2rem;  
     }
     
 
