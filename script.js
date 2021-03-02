@@ -1,8 +1,3 @@
-// transactons = transaction e viser se versa no codigo do professro
-// tempo 2:42:00
-// colocar o botao de salvar com a seleção verde 
-
-
 const Modal = {
     open() {
         document.querySelector('.modal-overlay').classList.add('active')
